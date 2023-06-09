@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .container {
+      width: 300px;
+      height: 300px;
+      border: 2px solid #ccc;
+      padding: 10px;
+      float: left;
+      margin: 10px;
+    }
+
+    .item {
+      background-color: #f1f1f1;
+      padding: 10px;
+      margin: 10px 0;
+      cursor: move;
+    }
+
+    .item.dragging {
+      opacity: 0.5;
+    }
+
+    #successMessage {
+      display: none;
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Siddharth front-end assignment</h2>
+
+  <div class="container" id="container1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h3>Container 1</h3>
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item1">Item 1</div>
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item2">Item 2</div>
+    <div class="item" draggable="true" ondragstart="drag(event)" id="item3">Item 3</div>
+  </div>
+
+  <div class="container" id="container2" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h3>Container 2</h3>
+  </div>
+
+  <div id="successMessage"></div>
+
+  <button onclick="reset()">Reset</button>
+
+  <script>
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+      event.target.classList.add('dragging');
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      var data = event.dataTransfer.getData("text");
+      var item = document.getElementById(data);
+      event.target.appendChild(item);
+      item.classList.remove('dragging');
+
+      // Update UI or display success message
+      if (event.target.classList.contains('container') && event.target.id !== 'container1') {
+        var successMessage = document.getElementById('successMessage');
+        successMessage.textContent = 'Item successfully dropped!';
+        successMessage.style.display = 'block';
+      }
+    }
+
+    function reset() {
+      var container1 = document.querySelector('#container1');
+      var container2 = document.querySelector('#container2');
+      container1.innerHTML = '<h3>Container 1</h3>' +
+        '<div class="item" draggable="true" ondragstart="drag(event)" id="item1">Item 1</div>' +
+        '<div class="item" draggable="true" ondragstart="drag(event)" id="item2">Item 2</div>' +
+        '<div class="item" draggable="true" ondragstart="drag(event)" id="item3">Item 3</div>';
+      container2.innerHTML = '<h3>Container 2</h3>';
+      var successMessage = document.getElementById('successMessage');
+      successMessage.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
